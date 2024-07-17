@@ -1,5 +1,5 @@
 # CollabDoc: Collaborative Document Editing Platform
-Welcome to the CollabDoc! This application allows users to collaboratively edit documents in real-time, providing features like user authentication, document sharing, and real-time notifications.
+Welcome to CollabDoc! This application allows users to collaboratively edit documents in real-time, providing features like user authentication, document sharing, and real-time notifications.
 
 ## Features
 - User Authentication: Sign up, log in, and manage your profile securely.
