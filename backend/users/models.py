@@ -1,9 +1,6 @@
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
-)
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
+from django.utils import timezone as tz
 
 
 class UserManager(BaseUserManager):
@@ -26,23 +23,28 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(
         max_length=20, unique=True, null=True, blank=True
     )
-    password_hash = models.CharField(max_length=255)
     timezone = models.CharField(max_length=50, default="UTC")
     avatar = models.URLField(blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=tz.now())
+    last_login = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "email", "password"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "password"]
 
     def __str__(self):
         return self.email
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.is_active:
+            self.last_login = tz.now()
+        super().save(*args, **kwargs)
