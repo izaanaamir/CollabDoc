@@ -1,5 +1,8 @@
-from django.contrib.auth.models import AbstractBaseUser  # noqa
-from django.contrib.auth.models import BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 
 
