@@ -1,22 +1,20 @@
-# In documents/serializers.py
-from rest_framework import serializers
-from .models import Document, DocumentVersion
+# In documents/models.py
+from django.db import models
+from django.conf import settings
 
 
-class DocumentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Document
-        fields = [
-            "id",
-            "title",
-            "owner",
-            "is_private",
-            "created_at",
-            "updated_at",
-        ]
+class Document(models.Model):
+    title = models.CharField(max_length=255)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
+    is_private = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
-class DocumentVersionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DocumentVersion
-        fields = ["id", "document", "version_number", "content", "created_at"]
+class DocumentVersion(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    version_number = models.IntegerField()
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
